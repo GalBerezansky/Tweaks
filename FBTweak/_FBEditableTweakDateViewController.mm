@@ -43,6 +43,38 @@
   _datePicker = [[UIDatePicker alloc] initWithFrame:datePickerRect];
   self.datePicker.date = self.tweak.currentValue ?: self.tweak.defaultValue;
   [self.view addSubview:self.datePicker];
+
+  if (@available(iOS 14.0, *)) {
+    // In iOS 14 and above, the default \c UIDatePickerStyle changed from \c UIDatePickerStyleWheels
+    // to \c UIDatePickerStyleAutomatic.
+    self.datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
+    [self.datePicker setValue:UIColor.blackColor forKey:@"textColor"];
+    self.datePicker.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addDatePickerConstraints];
+  }
+}
+
+- (void)addDatePickerConstraints {
+  auto topConstraint =
+      [NSLayoutConstraint constraintWithItem:self.datePicker
+                                   attribute:NSLayoutAttributeTop
+                                   relatedBy:NSLayoutRelationEqual
+                                      toItem:self.view
+                                   attribute:NSLayoutAttributeTop
+                                  multiplier:1.0
+                                    constant:40];
+
+  auto centerXAxisConstraint =
+      [NSLayoutConstraint constraintWithItem:self.datePicker
+                                   attribute:NSLayoutAttributeCenterX
+                                   relatedBy:NSLayoutRelationEqual
+                                      toItem:self.view
+                                   attribute:NSLayoutAttributeCenterX
+                                  multiplier:1.0
+                                    constant:0];
+
+  [self.view addConstraint:topConstraint];
+  [self.view addConstraint:centerXAxisConstraint];
 }
 
 - (void)pressDateButton {
